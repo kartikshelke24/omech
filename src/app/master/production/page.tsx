@@ -20,6 +20,22 @@ const MachineProductionManagement = () => {
     setNewProductionRunId(""); // Clear input
   };
 
+  const Tbl_Machines = [
+    {machine_name : "TUBE 01",machine_type : "Pipe Production" , status : "Active" , capacity : 23},
+    {machine_name : "TUBE 02",machine_type : "Pipe Production" , status : "Active" , capacity : 23},
+    {machine_name : "TUBE 03",machine_type : "Pipe Production" , status : "Active" , capacity : 23},
+    {machine_name : "TUBE 04",machine_type : "Pipe Production" , status : "Active" , capacity : 23},
+    {machine_name : "LASER 01",machine_type : "Cutting" , status : "Active" , capacity : 23},
+    {machine_name : "LASER 02",machine_type : "Cutting" , status : "Active" , capacity : 23},
+  ]
+
+  const Col_Tbl_Machines = [
+    { title: 'Machine Name', dataIndex: 'machine_name' },
+    { title: 'Machine Type', dataIndex: 'machine_type' },
+    { title: 'Machine Type', dataIndex: 'status' },
+    { title: 'Machine Type', dataIndex: 'capacity' }
+  ]
+
   return (
     <div>
       <h1>Machine & Production Management</h1>
@@ -35,6 +51,14 @@ const MachineProductionManagement = () => {
               />
             </Form.Item>
             <Form.Item>
+              <Input
+                placeholder="Machine Type"
+                value={newMachineName}
+                onChange={(e) => setNewMachineName(e.target.value)}
+              />
+            </Form.Item>
+            
+            <Form.Item>
               <Button onClick={handleAddMachine} type="primary">
                 Add Machine
               </Button>
@@ -42,9 +66,10 @@ const MachineProductionManagement = () => {
           </Form>
 
           <Table
-            columns={[{ title: 'Machine Name', dataIndex: 'name' }]}
-            dataSource={machines}
+            columns={Col_Tbl_Machines}
+            dataSource={Tbl_Machines}
             rowKey="name"
+            className="mt-3"
           />
         </TabPane>
 

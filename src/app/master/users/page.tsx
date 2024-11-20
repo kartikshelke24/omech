@@ -15,6 +15,20 @@ const SystemUserManagement = () => {
     setNewUserRole(""); // Clear input
   };
 
+  const Tbl_Users = [
+    {first_name : "Karan" , last_name : "Jadhav" ,user_name : "karJad001",user_type : "Admin" , status : "Active" },
+    {first_name : "Karan" , last_name : "Jadhav" ,user_name : "karJad002",user_type : "Staff" , status : "Active" },
+    {first_name : "Karan" , last_name : "Jadhav" ,user_name : "karJad003",user_type : "Staff" , status : "Active" },
+  ]
+
+  const Col_Tbl_Users = [
+    { title: 'First Name', dataIndex: 'first_name' },
+    { title: 'Last Name', dataIndex: 'last_name' },
+    { title: 'User Name', dataIndex: 'user_name' },
+    { title: 'Role', dataIndex: 'user_type' },
+    { title: 'Status', dataIndex: 'status' },
+  ]
+
   return (
     <div>
       <h1>System & User Management</h1>
@@ -44,9 +58,10 @@ const SystemUserManagement = () => {
           </Form>
 
           <Table
-            columns={[{ title: 'User Name', dataIndex: 'name' }, { title: 'Role', dataIndex: 'role' }]}
-            dataSource={users}
+            columns={Col_Tbl_Users}
+            dataSource={Tbl_Users}
             rowKey="name"
+            className="mt-3"
           />
         </TabPane>
       </Tabs>

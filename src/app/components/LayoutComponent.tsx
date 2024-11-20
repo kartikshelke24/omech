@@ -17,6 +17,107 @@ import {
 
 const { Header, Sider, Content, Footer } = Layout;
 
+
+
+const menuItems = [
+  {
+    key: 'dashboard',
+    icon: <DashboardOutlined />,
+    label: 'Dashboard',
+    link: '/dashboard',
+  },
+  {
+    key: 'management',
+    icon: <DatabaseOutlined />,
+    label: 'Management',
+    subMenu: [
+      {
+        key: 'products',
+        label: 'Products',
+        link: '/products',
+      },
+      {
+        key: 'inventory',
+        label: 'Inventory',
+        link: '/inventory',
+      },
+      {
+        key: 'production',
+        label: 'Production',
+        link: '/production',
+      },
+    ],
+  },
+  {
+    key: 'orders',
+    icon: <ShoppingCartOutlined />,
+    label: 'Orders',
+    link: '/orders',
+  },
+  {
+    key: 'resources',
+    icon: <BuildOutlined />,
+    label: 'Resources',
+    subMenu: [
+      {
+        key: 'materials',
+        label: 'Materials',
+        link: '/materials',
+      },
+      {
+        key: 'suppliers',
+        label: 'Suppliers',
+        link: '/suppliers',
+      },
+    ],
+  },
+  {
+    key: 'transactions',
+    icon: <SyncOutlined />,
+    label: 'Transactions',
+    link: '/transactions',
+  },
+  {
+    key: 'reports',
+    icon: <BarChartOutlined />,
+    label: 'Reports',
+    link: '/reports',
+  },
+  {
+    key: 'master',
+    icon: <DatabaseOutlined />,
+    label: 'Master',
+    subMenu: [
+      {
+        key: 'inventory-stock',
+        label: 'Inventory Stock',
+        link: '/master/inventory-stock',
+      },
+      {
+        key: 'material',
+        label: 'Material',
+        link: '/master/material',
+      },
+      {
+        key: 'production',
+        label: 'Production',
+        link: '/master/production',
+      },
+      {
+        key: 'users',
+        label: 'Users',
+        link: '/master/users',
+      },
+    ],
+  },
+  {
+    key: 'settings',
+    icon: <SettingOutlined />,
+    label: 'Settings',
+    link: '/settings',
+  },
+];
+
 const LayoutComponent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -28,47 +129,23 @@ const LayoutComponent: React.FC<{ children: React.ReactNode }> = ({ children }) 
         <div className="demo-logo" style={{ color: 'white', padding: '16px', fontSize: '18px', textAlign: 'center' }}>
           Manufacturing System
         </div>
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['dashboard']}
-        >
-          {/* Sidebar Menu Items */}
-          <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-            <Link href="/dashboard">Dashboard</Link>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['dashboard']}>
+  {menuItems.map(item =>
+    item.subMenu ? (
+      <Menu.SubMenu key={item.key} icon={item.icon} title={item.label}>
+        {item.subMenu.map(subItem => (
+          <Menu.Item key={subItem.key}>
+            <Link href={subItem.link}>{subItem.label}</Link>
           </Menu.Item>
-          <Menu.SubMenu key="management" icon={<DatabaseOutlined />} title="Management">
-            <Menu.Item key="products">
-              <Link href="/products">Products</Link>
-            </Menu.Item>
-            <Menu.Item key="inventory">
-              <Link href="/inventory">Inventory</Link>
-            </Menu.Item>
-            <Menu.Item key="production">
-              <Link href="/production">Production</Link>
-            </Menu.Item>
-          </Menu.SubMenu>
-          <Menu.Item key="orders" icon={<ShoppingCartOutlined />}>
-            <Link href="/orders">Orders</Link>
-          </Menu.Item>
-          <Menu.SubMenu key="resources" icon={<BuildOutlined />} title="Resources">
-            <Menu.Item key="materials">
-              <Link href="/materials">Materials</Link>
-            </Menu.Item>
-            <Menu.Item key="suppliers">
-              <Link href="/suppliers">Suppliers</Link>
-            </Menu.Item>
-          </Menu.SubMenu>
-          <Menu.Item key="transactions" icon={<SyncOutlined />}>
-            <Link href="/transactions">Transactions</Link>
-          </Menu.Item>
-          <Menu.Item key="reports" icon={<BarChartOutlined />}>
-            <Link href="/reports">Reports</Link>
-          </Menu.Item>
-          <Menu.Item key="settings" icon={<SettingOutlined />}>
-            <Link href="/settings">Settings</Link>
-          </Menu.Item>
-        </Menu>
+        ))}
+      </Menu.SubMenu>
+    ) : (
+      <Menu.Item key={item.key} icon={item.icon}>
+        <Link href={item.link}>{item.label}</Link>
+      </Menu.Item>
+    )
+  )}
+</Menu>
       </Sider>
 
       <Layout>

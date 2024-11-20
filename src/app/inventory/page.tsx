@@ -1,28 +1,28 @@
 'use client';
 import React, { useState } from 'react';
-import { Button, Table, Input, Row, Col, Modal, Form, Select, InputNumber, Drawer } from 'antd';
+import { Button, Table, Input, Row, Col, Modal, Form, Select, InputNumber, Drawer, Flex } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 // Sample data for the inventory table
 const initialInventoryData = [
   {
     key: '1',
-    name: 'Stainless Steel Pipe',
+    name: 'TUBE 001',
     category: 'Pipe',
     material: '304 Stainless Steel',
     size: '4 inches',
     stock: 120,
-    reorderLevel: 50,
+    quantity: 50,
     lastUpdated: '2024-11-15',
   },
   {
     key: '2',
-    name: 'Carbon Steel Tube',
-    category: 'Tube',
+    name: 'TUBE 002',
+    category: 'Pipe',
     material: 'Carbon Steel',
     size: '6 inches',
     stock: 30,
-    reorderLevel: 20,
+    quantity: 20,
     lastUpdated: '2024-11-16',
   },
 ];
@@ -30,17 +30,17 @@ const initialInventoryData = [
 const Inventory: React.FC = () => {
   // Type for the inventory data
   const [inventoryData, setInventoryData] = useState<
-    { key: string, name: string, category: string, material: string, size: string, stock: number, reorderLevel: number, lastUpdated: string }[]
+    { key: string, name: string, category: string, material: string, size: string, stock: number, quantity: number, lastUpdated: string }[]
   >(initialInventoryData);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<null | { name: string, category: string, material: string, size: string, stock: number, reorderLevel: number, lastUpdated: string }>(null);
+  const [selectedItem, setSelectedItem] = useState<null | { name: string, category: string, material: string, size: string, stock: number, quantity: number, lastUpdated: string }>(null);
 
   const [form] = Form.useForm();
 
   // Handler to submit form data
-  const handleFormSubmit = (values: { name: string, category: string, material: string, size: string, stock: number, reorderLevel: number }) => {
+  const handleFormSubmit = (values: { name: string, category: string, material: string, size: string, stock: number, quantity: number }) => {
     const newData = {
       key: `${inventoryData.length + 1}`,
       ...values,
@@ -52,8 +52,13 @@ const Inventory: React.FC = () => {
 
   // Column definitions for the inventory table
   const columns = [
+    // {
+    //   title: 'Item Name',
+    //   dataIndex: 'name',
+    //   key: 'name',
+    // },
     {
-      title: 'Item Name',
+      title: 'Machine Name',
       dataIndex: 'name',
       key: 'name',
     },
@@ -72,20 +77,20 @@ const Inventory: React.FC = () => {
       dataIndex: 'size',
       key: 'size',
     },
+    // {
+    //   title: 'Current Stock',
+    //   dataIndex: 'stock',
+    //   key: 'stock',
+    //   render: (stock: number) => (
+    //     <span style={{ color: stock < 20 ? 'red' : 'green' }}>
+    //       {stock}
+    //     </span>
+    //   ),
+    // },
     {
-      title: 'Current Stock',
-      dataIndex: 'stock',
-      key: 'stock',
-      render: (stock: number) => (
-        <span style={{ color: stock < 20 ? 'red' : 'green' }}>
-          {stock}
-        </span>
-      ),
-    },
-    {
-      title: 'Reorder Level',
-      dataIndex: 'reorderLevel',
-      key: 'reorderLevel',
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      key: 'quantity',
     },
     {
       title: 'Last Updated',
@@ -142,11 +147,76 @@ const Inventory: React.FC = () => {
   return (
     <div style={{ padding: 24 }}>
       {/* Header with Add New Item button */}
+      
+
+
       <Row justify="space-between" style={{ marginBottom: 16 }}>
-        <Col>
-          <Input.Search placeholder="Search Inventory" style={{ width: 300 }} />
-        </Col>
-        <Col>
+      <Col style={{width:'100%'}}>
+
+      <Form form={form} onFinish={handleFormSubmit} layout="vertical">
+        <Flex justify='' align='center' gap={20}>
+          {/* <Form.Item
+            label="Item Name"
+            name="name"
+            rules={[{ required: true, message: 'Please input the item name!' }]}
+          >
+            <Input />
+          </Form.Item> */}
+          <Form.Item
+            label="Tube Machine"
+            name="machine"
+            rules={[{ required: true, message: 'Please select a Machine!' }]}
+          >
+            <Select>
+              <Select.Option value="Tube">TUBE 001</Select.Option>
+              <Select.Option value="Laser">TUBE 002</Select.Option>
+              <Select.Option value="Laser">TUBE 003</Select.Option>
+              <Select.Option value="Laser">TUBE 004</Select.Option>
+              <Select.Option value="Laser">TUBE 005</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Material Grade"
+            name="grade"
+            rules={[{ required: true, message: 'Please input the material grade!' }]}
+          >
+            <Select style={{width:'200px'}}>
+              <Select.Option value="Tube">304</Select.Option>
+              <Select.Option value="Laser">441  </Select.Option>
+              <Select.Option value="Laser">450</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="OD"
+            name="od"
+            rules={[{ required: true, message: 'Please input the size!' }]}
+          >
+            <Select style={{width:'200px'}}>
+              <Select.Option value="Tube">38.1</Select.Option>
+              <Select.Option value="Laser">52  </Select.Option>
+              <Select.Option value="Laser">31.75</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label="Thickness"
+            name="thickness"
+            rules={[{ required: true, message: 'Please Select the Thickness!' }]}
+          >
+            <Select style={{width:'200px'}}>
+              <Select.Option value="Tube">1</Select.Option>
+              <Select.Option value="Laser">1.5  </Select.Option>
+              <Select.Option value="Laser">2</Select.Option>
+            </Select>
+          </Form.Item>
+          
+          <Form.Item
+            label="Quantity"
+            name="stock"
+            rules={[{ required: true, message: 'Please input the Quantity!' }]}
+          >
+            <InputNumber min={0} style={{ width: '100%' }} />
+          </Form.Item>
+         
           <Button
             type="primary"
             icon={<PlusOutlined />}
@@ -154,9 +224,23 @@ const Inventory: React.FC = () => {
           >
             Add New Item
           </Button>
+          </Flex>
+        </Form>
+
+
+         
         </Col>
       </Row>
 
+
+      <Row justify="end" style={{ marginBottom: 16 }}>
+        <Col>
+          <Input.Search placeholder="Search Inventory" style={{ width: 300 }} />
+        </Col>
+        
+      </Row>
+
+      
       {/* Inventory Table */}
       <Table
         columns={columns}
@@ -175,53 +259,7 @@ const Inventory: React.FC = () => {
         onCancel={() => setIsModalVisible(false)}
         onOk={() => form.submit()}
       >
-        <Form form={form} onFinish={handleFormSubmit} layout="vertical">
-          <Form.Item
-            label="Item Name"
-            name="name"
-            rules={[{ required: true, message: 'Please input the item name!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Category"
-            name="category"
-            rules={[{ required: true, message: 'Please select a category!' }]}
-          >
-            <Select>
-              <Select.Option value="Pipe">Pipe</Select.Option>
-              <Select.Option value="Tube">Tube</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label="Material Grade"
-            name="material"
-            rules={[{ required: true, message: 'Please input the material grade!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Size"
-            name="size"
-            rules={[{ required: true, message: 'Please input the size!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Initial Stock"
-            name="stock"
-            rules={[{ required: true, message: 'Please input the initial stock!' }]}
-          >
-            <InputNumber min={0} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item
-            label="Reorder Level"
-            name="reorderLevel"
-            rules={[{ required: true, message: 'Please input the reorder level!' }]}
-          >
-            <InputNumber min={0} style={{ width: '100%' }} />
-          </Form.Item>
-        </Form>
+
       </Modal>
 
       {/* Drawer for item details */}
@@ -238,8 +276,8 @@ const Inventory: React.FC = () => {
             <p><b>Category:</b> {selectedItem.category}</p>
             <p><b>Material:</b> {selectedItem.material}</p>
             <p><b>Size:</b> {selectedItem.size}</p>
-            <p><b>Current Stock:</b> {selectedItem.stock}</p>
-            <p><b>Reorder Level:</b> {selectedItem.reorderLevel}</p>
+            {/* <p><b>Current Stock:</b> {selectedItem.stock}</p> */}
+            <p><b>Reorder Level:</b> {selectedItem.quantity}</p>
             <p><b>Last Updated:</b> {selectedItem.lastUpdated}</p>
           </div>
         )}
