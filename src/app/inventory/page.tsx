@@ -1,153 +1,119 @@
-'use client';
-
+'use client'
+// src/inventory/InventoryPage.tsx
 import React, { useState } from 'react';
-import { Table, Button, Input, Select, Space, Modal, Form, notification } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Button, Row, Col, Card } from 'antd';
+import InventoryFilters from '../components/InventoryFilters';
+import InventoryTable from '../components/InventoryTable';
+import AddEditInventoryModal from '../components/AddEditInventoryModal';
+import StockAlerts from '../components/StockAlerts';
 
-const { Option } = Select;
-
-// Inventory Data Mock (Replace with API calls)
-const mockInventoryData = [
-  {
-    key: '1',
-    productName: 'Pipe - A106 - 100mm OD - 5mm Thickness',
-    category: 'Raw Pipe',
-    materialGrade: 'A106',
-    quantity: 20,
-    od: '100mm',
-    thickness: '5mm',
-    length: '6m',
-  },
-  {
-    key: '2',
-    productName: 'Pipe - A106 - 100mm OD - 5mm Thickness - Polished',
-    category: 'Finished Pipe',
-    materialGrade: 'A106',
-    quantity: 10,
-    od: '100mm',
-    thickness: '5mm',
-    length: '3m',
-  },
-];
-
-// Table Columns
-const columns: ColumnsType<any> = [
-  {
-    title: 'Product Name',
-    dataIndex: 'productName',
-    key: 'productName',
-  },
-  {
-    title: 'Category',
-    dataIndex: 'category',
-    key: 'category',
-  },
-  {
-    title: 'Material Grade',
-    dataIndex: 'materialGrade',
-    key: 'materialGrade',
-  },
-  {
-    title: 'Quantity',
-    dataIndex: 'quantity',
-    key: 'quantity',
-  },
-  {
-    title: 'OD (Outer Diameter)',
-    dataIndex: 'od',
-    key: 'od',
-  },
-  {
-    title: 'Thickness',
-    dataIndex: 'thickness',
-    key: 'thickness',
-  },
-  {
-    title: 'Length',
-    dataIndex: 'length',
-    key: 'length',
-  },
-  {
-    title: 'Actions',
-    key: 'actions',
-    render: (_, record) => (
-      <Space>
-        <Button type="primary" onClick={() => handleProcess(record)}>
-          Process Item
-        </Button>
-        <Button danger onClick={() => handleDelete(record)}>
-          Delete
-        </Button>
-      </Space>
-    ),
-  },
-];
-
-// Handlers (Replace with backend API logic)
-const handleProcess = (record: any) => {
-  notification.info({
-    message: `Processing ${record.productName}`,
-    description: 'Redirecting to Laser Machine job creation...',
-  });
-  // Redirect logic here
-};
-
-const handleDelete = (record: any) => {
-  Modal.confirm({
-    title: 'Are you sure?',
-    content: `This will delete ${record.productName} from inventory.`,
-    onOk: () => {
-      notification.success({ message: 'Deleted successfully!' });
-      // Backend delete logic here
-    },
-  });
-};
+interface InventoryItem {
+  id: number;
+  grade: string;
+  outerDiameter: string;
+  thickness: string;
+  quantity: number;
+}
 
 const InventoryPage: React.FC = () => {
-  const [data, setData] = useState(mockInventoryData);
+  // Dummy Inventory Data
+  const [inventory, setInventory] = useState<InventoryItem[]>([
+    { id: 1, grade: 'Grade A', outerDiameter: '50mm', thickness: '1mm', quantity: 100 },
+    { id: 2, grade: 'Grade B', outerDiameter: '75mm', thickness: '2mm', quantity: 150 },
+    { id: 3, grade: 'Grade C', outerDiameter: '100mm', thickness: '3mm', quantity: 200 },
+  ]);
 
-  const handleAddNew = () => {
-    Modal.info({
-      title: 'Add New Inventory',
-      content: (
-        <Form layout="vertical">
-          <Form.Item label="Product Name">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Material Grade">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Category">
-            <Select>
-              <Option value="Raw Pipe">Raw Pipe</Option>
-              <Option value="Finished Pipe">Finished Pipe</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item label="Quantity">
-            <Input type="number" />
-          </Form.Item>
-        </Form>
-      ),
-      onOk: () => {
-        notification.success({ message: 'Inventory added successfully!' });
-        // Backend add logic here
-      },
-    });
+  // Dummy Low Stock Data
+  const [stockAlerts] = useState<InventoryItem[]>([
+    { id: 1, grade: 'Grade A', outerDiameter: '50mm', thickness: '1mm', quantity: 5 },
+    { id: 2, grade: 'Grade B', outerDiameter: '75mm', thickness: '2mm', quantity: 10 },
+  ]);
+
+  // State for filter values and modal visibility
+  const [filters, setFilters] = useState({});
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
+
+  // Function to handle filter changes
+  const handleFilterChange = (newFilters: any) => {
+    setFilters(newFilters);
+    // You can implement filtering logic here with the dummy data
+  };
+
+  // Function to handle inventory item edit
+  const handleEditItem = (item: InventoryItem) => {
+    setEditingItem(item);
+    setIsModalVisible(true);
+  };
+
+  // Function to handle inventory item save (Add/Update)
+  const handleSaveItem = (itemData: any) => {
+    if (editingItem) {
+      // Update logic with dummy data
+      setInventory(prev =>
+        prev.map(item => (item.id === editingItem.id ? { ...item, ...itemData } : item))
+      );
+    } else {
+      // Add logic with dummy data
+      const newId = inventory.length ? Math.max(...inventory.map(i => i.id)) + 1 : 1;
+      setInventory(prev => [...prev, { id: newId, ...itemData }]);
+    }
+
+    // Reset modal state
+    setEditingItem(null);
+    setIsModalVisible(false);
+  };
+
+  // Function to handle deletion
+  const handleDeleteItem = () => {
+    // Update your deletion logic here with dummy data
+  };
+
+  // Function to reset the modal state
+  const closeModal = () => {
+    setEditingItem(null);
+    setIsModalVisible(false);
   };
 
   return (
-    <div>
-      <Space style={{ marginBottom: 16 }}>
-        <Button type="primary" onClick={handleAddNew}>
-          Add Inventory
-        </Button>
-        <Input.Search placeholder="Search inventory..." style={{ width: 300 }} />
-        <Select placeholder="Filter by Category" style={{ width: 200 }}>
-          <Option value="Raw Pipe">Raw Pipe</Option>
-          <Option value="Finished Pipe">Finished Pipe</Option>
-        </Select>
-      </Space>
-      <Table columns={columns} dataSource={data} />
+    <div style={{ padding: 24 }}>
+      <Row gutter={24}>
+        {/* Filters */}
+        <Col span={6}>
+          <Card title="Filters">
+            <InventoryFilters onFilterChange={handleFilterChange} />
+          </Card>
+        </Col>
+
+        {/* Inventory Table */}
+        <Col span={12}>
+          <Card
+            title="Inventory List"
+            extra={
+              <Button type="primary" onClick={() => setIsModalVisible(true)}>
+                Add Inventory
+              </Button>
+            }
+          >
+            <InventoryTable onEdit={handleEditItem} onDelete={handleDeleteItem} />
+          </Card>
+        </Col>
+
+        {/* Low Stock Alerts */}
+        <Col span={6}>
+          <Card title="Stock Alerts">
+            <StockAlerts stockAlerts={stockAlerts} />
+          </Card>
+        </Col>
+      </Row>
+
+      {/* Add/Edit Inventory Modal */}
+      <AddEditInventoryModal
+        visible={isModalVisible}
+        onClose={closeModal}
+        onSave={handleSaveItem}
+        editingItem={editingItem}
+      />
     </div>
   );
 };

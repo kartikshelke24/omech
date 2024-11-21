@@ -175,7 +175,7 @@ const LayoutComponent: React.FC<{ children: React.ReactNode }> = ({ children }) 
         </Content>
 
         <Footer style={{ textAlign: 'center' }}>
-          Manufacturing System ©{new Date().getFullYear()} Created by Your Team
+          {/* Manufacturing System ©{new Date().getFullYear()} Created by Your Team */}
         </Footer>
       </Layout>
     </Layout>

@@ -1,148 +1,161 @@
+// src/app/dashboard/page.tsx
+
 'use client';
 import React from 'react';
-import { Row, Col, Card, Statistic, Table, Button } from 'antd';
+import { Card, Col, Row, Statistic, Table, Timeline, Tag, Divider } from 'antd';
 import { Line } from '@ant-design/plots';
 import {
-  DatabaseOutlined,
-  StockOutlined,
-  ShoppingCartOutlined,
-  SettingOutlined,
+  UserOutlined,
+  BarChartOutlined,
+  AlertOutlined,
+  TeamOutlined,
+  LineChartOutlined,
 } from '@ant-design/icons';
 
-const Dashboard: React.FC = () => {
-  // Sample data for charts and tables
+const DashboardPage: React.FC = () => {
+  // Sample data for inventory and production trends
   const productionData = [
-    { month: 'Jan', value: 200 },
-    { month: 'Feb', value: 300 },
-    { month: 'Mar', value: 250 },
-    { month: 'Apr', value: 400 },
-    { month: 'May', value: 350 },
+    { month: 'January', production: 500 },
+    { month: 'February', production: 450 },
+    { month: 'March', production: 600 },
+    { month: 'April', production: 700 },
+    { month: 'May', production: 650 },
+    { month: 'June', production: 800 },
+    { month: 'July', production: 750 },
   ];
 
-  const recentActivities = [
-    {
-      key: '1',
-      action: 'New Product Added',
-      status: 'Completed',
-      date: '2024-11-18',
-    },
-    {
-      key: '2',
-      action: 'Production Started',
-      status: 'In Progress',
-      date: '2024-11-17',
-    },
-    {
-      key: '3',
-      action: 'Inventory Updated',
-      status: 'Completed',
-      date: '2024-11-16',
-    },
+  const inventoryData = [
+    { key: '1', grade: '304L', size: '25mm', stock: 100, status: 'Available' },
+    { key: '2', grade: '316L', size: '32mm', stock: 50, status: 'Low Stock' },
+    { key: '3', grade: '410', size: '50mm', stock: 200, status: 'Available' },
   ];
 
-  // Config for Ant Design's Line Chart (Production Stats)
-  const productionConfig = {
+  const shiftData = [
+    { key: '1', staffName: 'John Doe', machine: 'Tube Machine 1', shift: 'Morning' },
+    { key: '2', staffName: 'Jane Smith', machine: 'Laser Machine 1', shift: 'Afternoon' },
+    { key: '3', staffName: 'Michael Brown', machine: 'Tube Machine 5', shift: 'Night' },
+  ];
+
+  // Chart configuration for Production Trends
+  const productionChartConfig = {
     data: productionData,
     xField: 'month',
-    yField: 'value',
-    point: {
-      size: 5,
-      shape: 'diamond',
-    },
-    label: {
-      style: {
-        fill: '#aaa',
+    yField: 'production',
+    xAxis: {
+      label: {
+        autoRotate: true,
       },
+    },
+    yAxis: {
+      label: {
+        formatter: (v: number) => `${v} units`,
+      },
+    },
+    tooltip: {
+      showMarkers: false,
+    },
+    smooth: true,
+    lineStyle: {
+      stroke: '#1890ff',
     },
   };
 
   return (
     <div style={{ padding: 24 }}>
+      {/* Top Row: Production and Inventory Overview */}
       <Row gutter={16}>
-        {/* Metric Cards */}
-        <Col span={6}>
+        <Col span={8}>
           <Card>
             <Statistic
-              title="Total Products"
-              value={128}
-              prefix={<DatabaseOutlined />}
+              title="Active Machines"
+              value={10}
+              prefix={<BarChartOutlined />}
+              valueStyle={{ color: '#3f8600' }}
             />
           </Card>
         </Col>
-        <Col span={6}>
+        <Col span={8}>
+          <Card>
+            <Statistic
+              title="Production Rate (Today)"
+              value={500}
+              suffix="units"
+              prefix={<LineChartOutlined />}
+              valueStyle={{ color: '#1890ff' }}
+            />
+          </Card>
+        </Col>
+        <Col span={8}>
           <Card>
             <Statistic
               title="Inventory Status"
-              value={512}
-              prefix={<StockOutlined />}
-            />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="Orders"
-              value={42}
-              prefix={<ShoppingCartOutlined />}
-            />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="Production Status"
-              value="5 In Progress"
-              prefix={<SettingOutlined />}
+              value={1500}
+              suffix="items"
+              prefix={<AlertOutlined />}
+              valueStyle={{ color: '#cf1322' }}
             />
           </Card>
         </Col>
       </Row>
 
-      {/* Charts & Graphs */}
-      <Row gutter={16} style={{ marginTop: 24 }}>
-        <Col span={12}>
-          <Card title="Production Statistics">
-            <Line {...productionConfig} />
+      {/* Middle Row: Graphs for Production Trends & Inventory */}
+      <Divider style={{ margin: '24px 0' }}>Production and Inventory Trends</Divider>
+      <Row gutter={16}>
+        <Col span={16}>
+          <Card title="Production Trends">
+            <Line {...productionChartConfig} />
           </Card>
         </Col>
-        <Col span={12}>
-          <Card title="Inventory Usage">
-            {/* Placeholder for another chart (e.g., pie/bar chart) */}
-            <div style={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <span>Chart Component Placeholder</span>
-            </div>
-          </Card>
-        </Col>
-      </Row>
-
-      {/* Recent Activities Table */}
-      <Row gutter={16} style={{ marginTop: 24 }}>
-        <Col span={24}>
-          <Card
-            title="Recent Activities"
-            extra={<Button type="primary">View All</Button>}
-          >
+        <Col span={8}>
+          <Card title="Inventory Overview">
             <Table
-              dataSource={recentActivities}
               columns={[
-                {
-                  title: 'Action',
-                  dataIndex: 'action',
-                  key: 'action',
-                },
+                { title: 'Grade', dataIndex: 'grade', key: 'grade' },
+                { title: 'Size', dataIndex: 'size', key: 'size' },
+                { title: 'Stock', dataIndex: 'stock', key: 'stock' },
                 {
                   title: 'Status',
                   dataIndex: 'status',
                   key: 'status',
-                },
-                {
-                  title: 'Date',
-                  dataIndex: 'date',
-                  key: 'date',
+                  render: (status) => (
+                    <Tag color={status === 'Low Stock' ? 'volcano' : 'green'}>{status}</Tag>
+                  ),
                 },
               ]}
-              pagination={{ pageSize: 5 }}
+              dataSource={inventoryData}
+              pagination={false}
             />
+          </Card>
+        </Col>
+      </Row>
+
+      {/* Bottom Row: Staff Information and Alerts */}
+      <Divider style={{ margin: '24px 0' }}>Staff and Alerts</Divider>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Card title="Current Shifts">
+            <Table
+              columns={[
+                { title: 'Staff Name', dataIndex: 'staffName', key: 'staffName' },
+                { title: 'Machine', dataIndex: 'machine', key: 'machine' },
+                { title: 'Shift', dataIndex: 'shift', key: 'shift' },
+              ]}
+              dataSource={shiftData}
+              pagination={false}
+            />
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card title="Maintenance and Alerts">
+            <Timeline>
+              <Timeline.Item color="green">Laser Machine 1 - Maintenance Complete</Timeline.Item>
+              <Timeline.Item color="red">
+                Tube Machine 3 - Requires Maintenance
+              </Timeline.Item>
+              <Timeline.Item color="blue">
+                Inventory Check - Grade 316L Running Low
+              </Timeline.Item>
+            </Timeline>
           </Card>
         </Col>
       </Row>
@@ -150,4 +163,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardPage;
