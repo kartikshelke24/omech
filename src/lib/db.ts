@@ -1,26 +1,28 @@
-import sql, { ConnectionPool, config } from 'mssql';
+// lib/db.js
+const sql = require('mssql');
 
-// SQL Server connection configuration
-const dbConfig: config = {
-  user: 'kartik',            // Default to empty string if undefined
-  password: 'kartik',    // Default to empty string if undefined
-  server: 'DESKTOP-4B579BB\\SQLEXPRESS',          // Default to empty string if undefined
-  database: 'Omech',        // Default to empty string if undefined
-  // options: {
-  //   // encrypt: true,                            // Use encryption for data in transit
-  //   trustServerCertificate: true,             // Allow self-signed certificates
-  // },
+// Define the configuration for your database connection
+const config = {
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  server: process.env.DATABASE_HOST,
+  database: process.env.DATABASE_NAME,
+  options: {
+    encrypt: false, // Set to true if encryption is required
+    trustServerCertificate: true, // Use true if connecting to a server with a self-signed certificate
+  },
 };
 
+// Connection pool (reusable connection)
+let poolPromise: any;
 
-console.log(dbConfig);
-
-// Function to get a shared database connection pool
-export const getDbConnection = async (): Promise<ConnectionPool> => {
-  if (!dbConfig.server || !dbConfig.user || !dbConfig.password || !dbConfig.database) {
-    throw new Error('Database configuration is incomplete. Please check your environment variables.');
+const getConnection = async () => {
+  if (!poolPromise) {
+    poolPromise = sql.connect(config);
   }
-
-  // Initialize and return the connection pool
-  return await sql.connect(dbConfig);
+  return poolPromise;
 };
+
+export { sql, getConnection };
+
+  

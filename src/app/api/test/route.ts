@@ -1,0 +1,20 @@
+// src/app/api/test/route.ts
+import { NextResponse } from 'next/server';
+import { getConnection } from '@/lib/db';
+
+// Handle GET request
+export async function GET() {
+  try {
+    const pool = await getConnection();
+    
+    // Example query to fetch all rows from a table called 'your_table_name'
+    const result = await pool.request().query('SELECT * FROM users');
+    
+    // Send the fetched data as a response
+    return NextResponse.json(result.recordset);
+  } catch (error) {
+    console.error('Database query error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
