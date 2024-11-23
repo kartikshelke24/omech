@@ -18,3 +18,8 @@ export async function GET() {
   }
 }
 
+// DATABASE_HOST=DESKTOP-C7E52JU
+// DATABASE_NAME=Omech
+// DATABASE_USER=kartik
+// DATABASE_PASSWORD=kartik
+    
