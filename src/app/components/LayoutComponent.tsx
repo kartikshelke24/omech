@@ -42,18 +42,28 @@ const menuItems = [
         link: '/inventory',
       },
       {
+        key: 'inventory1',
+        label: 'Inventory 1',
+        link: '/inventory1',
+      },
+      {
+        key: 'inventory2',
+        label: 'Inventory 2',
+        link: '/inventory2',
+      },
+      {
         key: 'production',
         label: 'Production',
         link: '/production',
       },
     ],
   },
-  {
-    key: 'orders',
-    icon: <ShoppingCartOutlined />,
-    label: 'Orders',
-    link: '/orders',
-  },
+  // {
+  //   key: 'orders',
+  //   icon: <ShoppingCartOutlined />,
+  //   label: 'Orders',
+  //   link: '/orders',
+  // },
   {
     key: 'resources',
     icon: <BuildOutlined />,
@@ -71,12 +81,12 @@ const menuItems = [
       },
     ],
   },
-  {
-    key: 'transactions',
-    icon: <SyncOutlined />,
-    label: 'Transactions',
-    link: '/transactions',
-  },
+  // {
+  //   key: 'transactions',
+  //   icon: <SyncOutlined />,
+  //   label: 'Transactions',
+  //   link: '/transactions',
+  // },
   {
     key: 'reports',
     icon: <BarChartOutlined />,

@@ -1,13 +1,6 @@
 'use client'
 import React from 'react';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import LayoutComponent  from './components/LayoutComponent';
-const { Header, Content, Footer } = Layout;
-
-const items = new Array(15).fill(null).map((_, index) => ({
-  key: index + 1,
-  label: `nav ${index + 1}`,
-}));
+import { Card, Col, Row, Statistic } from 'antd';
 
 const Home: React.FC = () => {
   // const {
@@ -17,7 +10,31 @@ const Home: React.FC = () => {
   return (
    
 
-      "sad"
+    <div>
+    <h2>Dashboard</h2>
+    <Row gutter={16}>
+      <Col span={6}>
+        <Card>
+          <Statistic title="Total Orders" value={1128} />
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card>
+          <Statistic title="Total Revenue" value="$50,000" />
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card>
+          <Statistic title="Machine Utilization" value="80%" />
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card>
+          <Statistic title="Production Quantity" value={5000} />
+        </Card>
+      </Col>
+    </Row>
+  </div>
    
   );
 };

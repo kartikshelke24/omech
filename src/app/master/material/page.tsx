@@ -80,7 +80,7 @@ const ProductMaterialManagement = () => {
         </TabPane>
 
         {/* Pipe Finishes Tab */}
-        <TabPane tab="Finishes" key="3">
+        {/* <TabPane tab="Finishes" key="3">
           <Form layout="inline">
             <Form.Item>
               <Input
@@ -101,7 +101,7 @@ const ProductMaterialManagement = () => {
             dataSource={pipeFinishes}
             rowKey="finish"
           />
-        </TabPane>
+        </TabPane> */}
       </Tabs>
     </div>
   );

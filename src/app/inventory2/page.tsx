@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Table, Button, Modal, Form, Select, Input, Space, message } from 'antd';
+import { Table, Button, Modal, Form, Select, Input, Space, message,Flex } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -41,6 +41,7 @@ const InventoryPage: React.FC = () => {
 
   return (
     <div>
+      <Flex style={{justifyContent:'space-between'}}>
       <h2>Inventory Management</h2>
       <Button
         type="primary"
@@ -50,6 +51,7 @@ const InventoryPage: React.FC = () => {
       >
         Add Inventory
       </Button>
+      </Flex>
       <Table
         dataSource={inventoryData}
         columns={[

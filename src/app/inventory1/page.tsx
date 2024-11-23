@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Table, Button, Modal, Form, Select, DatePicker, Space, message } from 'antd';
+import { Table, Button, Modal, Form, Select, DatePicker, Space, message, Flex } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -60,6 +60,7 @@ const ProductionLogsPage: React.FC = () => {
 
   return (
     <div>
+      <Flex style={{justifyContent:'space-between'}}>
       <h2>Production/Processing Logs</h2>
       <Button
         type="primary"
@@ -69,6 +70,7 @@ const ProductionLogsPage: React.FC = () => {
       >
         Add Log
       </Button>
+      </Flex>
       <Table
         dataSource={logs}
         columns={[
