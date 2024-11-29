@@ -31,6 +31,33 @@ const menuItems = [
     icon: <DatabaseOutlined />,
     label: 'Management',
     subMenu: [
+      
+      {
+        key: 'inventoryMaster',
+        label: 'Inventory Master',
+        link: '/inventory-master',
+      },
+      {
+        key: 'inventory',
+        label: 'Inventory',
+        link: '/inventory',
+      },
+      {
+        key: 'machine',
+        label: 'Machine',
+        link: '/machine',
+      },
+      {
+        key: 'production1',
+        label: 'Production',
+        link: '/production',
+      },
+    ],
+  },{
+    key: 'management1',
+    icon: <DatabaseOutlined />,
+    label: 'Management',
+    subMenu: [
       {
         key: 'products',
         label: 'Products',
@@ -137,7 +164,7 @@ const LayoutComponent: React.FC<{ children: React.ReactNode }> = ({ children }) 
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible>
         <div className="demo-logo" style={{ color: 'white', padding: '16px', fontSize: '18px', textAlign: 'center' }}>
-          Manufacturing System
+          Omech
         </div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['dashboard']}>
   {menuItems.map(item =>
@@ -162,7 +189,7 @@ const LayoutComponent: React.FC<{ children: React.ReactNode }> = ({ children }) 
         <Header style={{ background: colorBgContainer, padding: 0, display: 'flex', alignItems: 'center' }}>
           <div style={{ flex: 1, paddingLeft: 24, fontSize: 18 }}>
             {/* Optional: Add your logo here */}
-            <span>Manufacturing System</span>
+            <span>Inventory management System</span>
           </div>
           {/* Placeholder for User Profile, Notifications, etc. */}
         </Header>

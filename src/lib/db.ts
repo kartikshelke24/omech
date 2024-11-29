@@ -10,6 +10,8 @@ const config = {
   options: {
     encrypt: false, // Set to true if encryption is required
     trustServerCertificate: true, // Use true if connecting to a server with a self-signed certificate
+    enableArithAbort: true, 
+    
   },
 };
 

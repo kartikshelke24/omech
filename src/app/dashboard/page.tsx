@@ -31,9 +31,9 @@ const DashboardPage: React.FC = () => {
   ];
 
   const shiftData = [
-    { key: '1', staffName: 'John Doe', machine: 'Tube Machine 1', shift: 'Morning' },
-    { key: '2', staffName: 'Jane Smith', machine: 'Laser Machine 1', shift: 'Afternoon' },
-    { key: '3', staffName: 'Michael Brown', machine: 'Tube Machine 5', shift: 'Night' },
+    { key: '1', staffName: 'Staff 1', machine: 'Tube Machine 1', shift: 'Morning' },
+    { key: '2', staffName: 'Staff 2', machine: 'Laser Machine 1', shift: 'Afternoon' },
+    { key: '3', staffName: 'Staff 3', machine: 'Tube Machine 5', shift: 'Night' },
   ];
 
   // Chart configuration for Production Trends

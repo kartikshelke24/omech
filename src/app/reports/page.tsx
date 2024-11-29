@@ -19,7 +19,7 @@ const ReportsPage: React.FC = () => {
     {
       key: '1',
       machine: 'Tube Machine #1',
-      staff: 'John Doe',
+      staff: 'Staff 1',
       shift: 'Morning',
       date: '2024-11-19',
       quantity: 200,

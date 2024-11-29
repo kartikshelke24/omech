@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Table, Button, Modal, Form, Input, Select, DatePicker, Space, message } from 'antd';
+import { Table, Button, Modal, Form, Input, Select, DatePicker, Space, message, Flex } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -10,7 +10,7 @@ const StaffAssignmentsPage: React.FC = () => {
   const [assignments, setAssignments] = useState([
     {
       key: '1',
-      staffName: 'John Doe',
+      staffName: 'Staff 1',
       machine: 'Tube Machine #5',
       shift: 'Morning (6 AM - 2 PM)',
       date: '2024-11-19',
@@ -33,14 +33,16 @@ const StaffAssignmentsPage: React.FC = () => {
 
   return (
     <div>
-      <h2>Staff Assignments</h2>
-      <Button
-        type="primary"
-        icon={<PlusOutlined />}
-        onClick={() => setIsModalOpen(true)}
-      >
-        Assign Staff
-      </Button>
+      <Flex style={{justifyContent:'space-between'}}>
+        <h2>Staff Assignments</h2>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={() => setIsModalOpen(true)}
+        >
+          Assign Machine
+        </Button>
+      </Flex>
       <Table
         dataSource={assignments}
         columns={[
@@ -64,8 +66,8 @@ const StaffAssignmentsPage: React.FC = () => {
             rules={[{ required: true, message: 'Please select a staff member!' }]}
           >
             <Select placeholder="Select staff">
-              <Option value="John Doe">John Doe</Option>
-              <Option value="Jane Smith">Jane Smith</Option>
+              <Option value="Staff 1">Staff 1</Option>
+              <Option value="Staff 2">Staff 2</Option>
             </Select>
           </Form.Item>
           <Form.Item

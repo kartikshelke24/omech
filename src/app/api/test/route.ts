@@ -8,13 +8,13 @@ export async function GET() {
     const pool = await getConnection();
     
     // Example query to fetch all rows from a table called 'your_table_name'
-    const result = await pool.request().query('SELECT * FROM users');
+    const result = await pool.request().query('SELECT * FROM Staff');
     
     // Send the fetched data as a response
     return NextResponse.json(result.recordset);
   } catch (error) {
     console.error('Database query error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error1: 'Internal Server Error', error}, { status: 500 });
   }
 }
 

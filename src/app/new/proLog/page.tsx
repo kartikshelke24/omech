@@ -1,23 +1,12 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
-import {
-  Table,
-  Button,
-  Modal,
-  Form,
-  Select,
-  DatePicker,
-  Input,
-  Space,
-  message,
-  notification,
-} from 'antd';
+import { Table, Button, Modal, Form, Select, DatePicker, Input, Space, message,notification, Flex } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { fetchAPI } from '../../../utils/apiUtils'; // Utility function for API calls
+import { fetchAPI } from '../../../../utils/apiUtils'; // Import the utility function
 
 const { Option } = Select;
+
 
 interface ProductionLogEntry {
   productionId: number;
@@ -32,6 +21,7 @@ interface ProductionLogEntry {
   thickness: string;
 }
 
+// Dropdown data structure
 interface DropdownData {
   products: Array<{ productId: number; od: string; thickness: string; grade: string }>;
   machines: Array<{ machineId: number; name: string }>;
@@ -39,10 +29,11 @@ interface DropdownData {
   shifts: string[];
 }
 
+
 const ProductionLogsPage: React.FC = () => {
   const [data, setData] = useState<ProductionLogEntry[]>([]);
-  const [dropdownData, setDropdownData] = useState<DropdownData | null>(null);
-  const [loading, setLoading] = useState(false);
+    const [dropdownData, setDropdownData] = useState<DropdownData | null>(null);
+    const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [machineType, setMachineType] = useState<'Tube' | 'Laser'>('Tube');
   const [logs, setLogs] = useState([
@@ -60,11 +51,13 @@ const ProductionLogsPage: React.FC = () => {
     },
   ]);
 
+  // Sample Tube Machine product list (this should ideally come from a backend API)
   const tubeMachineProducts = [
     { productId: '1', od: '50mm', thickness: '3mm', grade: 'SS304' },
     { productId: '2', od: '75mm', thickness: '5mm', grade: 'SS316' },
   ];
 
+  // Dropdown values
   const machines = [
     'Tube Machine #1',
     'Tube Machine #2',
@@ -82,16 +75,19 @@ const ProductionLogsPage: React.FC = () => {
   const thicknesses = ['3mm', '5mm', '8mm', '10mm'];
   const grades = ['SS304', 'SS316', 'MS', 'Aluminum'];
 
-  const handleAddLog = async (values: any) => {
+  // Handle new log submission
+  const handleAddLog = (values: any) => {
     let selectedProduct = null;
-  
+
     if (machineType === 'Laser') {
+      // Find the selected product from the tubeMachineProducts using the productId
       selectedProduct = tubeMachineProducts.find(
         (product) => product.productId === values.selectedProduct
       );
     }
-  
+
     const newLog = {
+      key: `${logs.length + 1}`,
       machineType,
       machine: values.machine,
       staff: values.staff,
@@ -102,53 +98,48 @@ const ProductionLogsPage: React.FC = () => {
       thickness: machineType === 'Tube' ? values.thickness : selectedProduct?.thickness,
       grade: machineType === 'Tube' ? values.grade : selectedProduct?.grade,
     };
+
+    setLogs([...logs, newLog]);
+    message.success(`${machineType} Machine log added successfully!`);
+    setIsModalOpen(false);
+  };
+
+
   
-    try {
-      // Assuming you have a function `saveProductionLog` for saving data
-      const response = await fetchAPI('/api/productionlog', 'POST', newLog);
+
+    
   
-      if (response.success) {
-        message.success(`${machineType} Machine log added successfully!`);
-        setLogs([...logs, { key: `${logs.length + 1}`, ...newLog }]);
-        setIsModalOpen(false); // Close the modal
-      } else {
-        message.error('Failed to add production log.');
+    // Fetch production logs and dropdown data
+    const fetchProductionLogs = async () => {
+      setLoading(true);
+      try {
+        const logs = await fetchAPI('/api/productionlog', 'GET');
+        setData(logs.data);
+      } catch (error) {
+        notification.error({ message: 'Error fetching production logs' });
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      notification.error({ message: 'Error saving production log' });
-    }
-  };
+    };
   
+    const fetchDropdownData = async () => {
+      try {
+        const dropdownData = await fetchAPI('/api/productionlog', 'GET');
+        setDropdownData(dropdownData.data);
+      } catch (error) {
+        notification.error({ message: 'Error fetching dropdown data' });
+      }
+    };
+  
+    useEffect(() => {
+      fetchProductionLogs();
+      fetchDropdownData();
+    }, []);
 
-  const fetchProductionLogs = async () => {
-    setLoading(true);
-    try {
-      const logs = await fetchAPI('/api/productionlog', 'GET');
-      setData(logs.data);
-    } catch (error) {
-      notification.error({ message: 'Error fetching production logs' });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchDropdownData = async () => {
-    try {
-      const dropdownData = await fetchAPI('/api/productionlog', 'GET');
-      setDropdownData(dropdownData.data);
-    } catch (error) {
-      notification.error({ message: 'Error fetching dropdown data' });
-    }
-  };
-
-  useEffect(() => {
-    fetchProductionLogs();
-    fetchDropdownData();
-  }, []);
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Flex style={{justifyContent:'space-between'}}>
         <h2>Production/Processing Logs</h2>
         <Button
           type="primary"
@@ -158,7 +149,7 @@ const ProductionLogsPage: React.FC = () => {
         >
           Add Log
         </Button>
-      </div>
+      </Flex>
       <Table
         dataSource={logs}
         columns={[
@@ -180,6 +171,7 @@ const ProductionLogsPage: React.FC = () => {
         footer={null}
       >
         <Form onFinish={handleAddLog}>
+          {/* Machine Type Selector */}
           <Form.Item label="Machine Type">
             <Select
               defaultValue="Tube"
@@ -189,6 +181,8 @@ const ProductionLogsPage: React.FC = () => {
               <Option value="Laser">Laser Machine</Option>
             </Select>
           </Form.Item>
+          
+          {/* Common Fields */}
           <Form.Item
             label="Machine"
             name="machine"
@@ -246,6 +240,8 @@ const ProductionLogsPage: React.FC = () => {
           >
             <Input placeholder="Enter quantity" />
           </Form.Item>
+
+          {/* Tube Machine-specific Fields */}
           {machineType === 'Tube' && (
             <>
               <Form.Item
@@ -289,29 +285,30 @@ const ProductionLogsPage: React.FC = () => {
               </Form.Item>
             </>
           )}
+
+          {/* Laser Machine-specific Fields */}
           {machineType === 'Laser' && (
             <Form.Item
-              label="Product"
+              label="Select Product"
               name="selectedProduct"
               rules={[{ required: true, message: 'Please select a product!' }]}
             >
               <Select placeholder="Select product">
                 {tubeMachineProducts.map((product) => (
                   <Option key={product.productId} value={product.productId}>
-                    {`${product.od} - ${product.thickness} - ${product.grade}`}
+                    {`OD: ${product.od}, Thickness: ${product.thickness}, Grade: ${product.grade}`}
                   </Option>
                 ))}
               </Select>
             </Form.Item>
           )}
-          <Form.Item>
-            <Space>
-              <Button type="primary" htmlType="submit">
-                Add Log
-              </Button>
-              <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
-            </Space>
-          </Form.Item>
+
+          <Space>
+            <Button type="primary" htmlType="submit">
+              Add Log
+            </Button>
+            <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
+          </Space>
         </Form>
       </Modal>
     </div>
