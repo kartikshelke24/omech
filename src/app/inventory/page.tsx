@@ -106,7 +106,8 @@ const ProductionLogsPage: React.FC = () => {
     try {
       // Assuming you have a function `saveProductionLog` for saving data
       const response = await fetchAPI('/api/productionlog', 'POST', newLog);
-  
+      console.log(response);
+      
       if (response.success) {
         message.success(`${machineType} Machine log added successfully!`);
         setLogs([...logs, { key: `${logs.length + 1}`, ...newLog }]);

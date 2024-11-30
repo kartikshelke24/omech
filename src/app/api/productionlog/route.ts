@@ -5,6 +5,8 @@ import { sql } from '../../../lib/db';
 // Define a POST method for creating/updating a production log
 import { getConnection } from '../../../lib/db';
 export async function POST(request: Request) {
+  // console.log(request.jso?Sn(), "requestKHS");
+  
   const { LogID, ProductID, MachineID, StaffID, ShiftID, Quantity, IsLaserCut, Remarks, Action } = await request.json();
   
   const pool = await getConnection();
@@ -20,6 +22,8 @@ export async function POST(request: Request) {
     .input('Remarks', sql.NVarChar, Remarks || '')
     .input('Action', sql.Char, Action)
       .execute('IU_ProductionLogs'); // Calling the stored procedure for insert/update
+      
+      console.log(result);
       
       return NextResponse.json(apiHandler.success(result.recordset, 'Production Log Created/Updated Successfully'), { status: 200 });
     } catch (error) {
